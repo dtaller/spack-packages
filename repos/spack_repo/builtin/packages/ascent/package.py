@@ -183,6 +183,8 @@ class Ascent(CMakePackage, CudaPackage, ROCmPackage):
     depends_on("cmake@3.14.1:3.14,3.18.2:", type="build")
     depends_on("cmake@3.23:", type="build", when="@0.9.4:")
 
+    depends_on("blt", type="build")
+
     #######################
     # Conduit
     #######################
@@ -362,6 +364,7 @@ class Ascent(CMakePackage, CudaPackage, ROCmPackage):
     def cmake_args(self):
         host_config = self._get_host_config_path(self.spec)
         options = []
+        options.append("-DBLT_SOURCE_DIR={0}".format(self.spec["blt"].prefix))
         options.extend(["-C", host_config, "../spack-src/src/"])
         if self.spec.satisfies("%oneapi"):
             options.extend(["-D", "CMAKE_Fortran_FLAGS=-nofor-main"])
